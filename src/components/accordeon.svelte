@@ -26,7 +26,7 @@
 		</div>
 	</div>
 	{#if visibility}
-		<div class="flex flex-col">
+		<div class="flex flex-col gap-1">
 			<Turnover />
 		</div>
 	{/if}
