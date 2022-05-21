@@ -11,6 +11,7 @@ module.exports = {
 				'light-emphasis': '#43425D',
 				'lighter-emphasis': '#575757',
 				'even-lighter-emphasis': '#8B8B8B',
+				'sku-highlight': '#FFE7BD'
 			},
 			fontFamily: {
 				'open-sans': ['Open Sans', 'sans-serif'],

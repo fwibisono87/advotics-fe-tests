@@ -1,4 +1,5 @@
 <script lang="ts">
+	import SkuList from './cards/skuList.svelte';
 	import Turnover from './cards/turnover.svelte';
 
 	let visibility = true;
@@ -28,6 +29,9 @@
 	{#if visibility}
 		<div class="flex flex-col gap-1">
 			<Turnover />
+			<div class="flex flex-row">
+				<SkuList />
+			</div>
 		</div>
 	{/if}
 </template>
