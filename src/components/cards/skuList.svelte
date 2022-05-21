@@ -37,7 +37,8 @@
 		}
 	];
 
-	const highlight = skuList.shift() || skuList[0];
+	$: highlight = skuList[0];
+	$: other = skuList.slice(1);
 </script>
 
 <template>
@@ -46,7 +47,7 @@
 			<h3 class="mb-4 text-xl text-emphasis">
 				{title}
 			</h3>
-            <img src="img/kebab.png" class="h-5"/>
+			<img src="img/kebab.png" alt="" class="h-5" />
 		</div>
 
 		<div class="flex flex-col gap-2">
@@ -56,7 +57,7 @@
 				price={highlight.price}
 				quantity={highlight.quantity}
 			/>
-			{#each skuList as sku}
+			{#each other as sku}
 				<Sku image={sku.image} name={sku.name} price={sku.price} quantity={sku.quantity} />
 			{/each}
 		</div>

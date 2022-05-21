@@ -1,11 +1,16 @@
 <script lang="ts">
-    // @ts-ignore, these modules were not made to be compatible with TS
+	// @ts-ignore, these modules were not made to be compatible with TS
 	import SveltyPicker from 'svelty-picker';
-    // @ts-ignore
+	// @ts-ignore
 	import ClickOutside from 'svelte-click-outside';
 
 	export let startDate = '12 September 2018';
 	export let endDate = '14 September 2018';
+	export let mode = 'yesterday';
+
+	let showLeft = true;
+	let showRight = true;
+	let counter = 0;
 
 	const calendarColors = 'calendar-colors';
 	const today = Date.now();
@@ -24,14 +29,14 @@
 		custom: false
 	};
 	let expanded = false;
-    let trigger;
+	let trigger;
 
 	function toggleExpand() {
 		expanded = !expanded;
 	}
-    function close(){
-        expanded = false
-    }
+	function close() {
+		expanded = false;
+	}
 	function setActiveSelector(selector: string) {
 		let key: keyof typeof activeSelector;
 		for (key in activeSelector) {
@@ -46,16 +51,19 @@
 		startDate = formatter.format(yesterday);
 		endDate = formatter.format(yesterday);
 		setActiveSelector('yesterday');
+		mode = 'yesterday';
 	}
 	function select7Days() {
 		startDate = formatter.format(new Date(today - 691200000));
 		endDate = formatter.format(yesterday);
 		setActiveSelector('sevenDays');
+		mode = 'sevenDays';
 	}
 	function select30Days() {
 		startDate = formatter.format(new Date(today - 2678400000));
 		endDate = formatter.format(yesterday);
 		setActiveSelector('lastThirtyDays');
+		mode = 'thirtyDays';
 	}
 	function getFirstDayPreviousMonth() {
 		const date = new Date();
@@ -69,19 +77,34 @@
 		startDate = formatter.format(getFirstDayPreviousMonth());
 		endDate = formatter.format(getLastDayPreviousMonth());
 		setActiveSelector('lastMonth');
+		mode = 'lastMonth';
 	}
 	function selectCustom() {
 		setActiveSelector('custom');
+		showLeft = showRight = false;
+		showRight = showLeft = true;
+		mode = 'custom';
 	}
 
 	$: todayFormatted = formatter.format(today);
+	$: yesterdayFormatted = formatter.format(yesterday);
+	$: {
+		if (startDate > endDate) {
+			endDate = formatter.format(new Date(startDate).setDate(new Date(startDate).getDate() + 1));
+		}
+	}
+	$: {
+		if (endDate === todayFormatted) {
+			endDate = formatter.format(yesterday);
+		}
+	}
 	selectYesterday();
 </script>
 
 <template>
 	<div class="relative inline-block">
 		<div
-        bind:this={trigger}
+			bind:this={trigger}
 			class="flex flex-row bg-white rounded-sm shadow-md py-3.5 px-4 h-min my-auto cursor-pointer"
 			on:click={toggleExpand}
 		>
@@ -143,30 +166,38 @@
 						</div>
 						<div class="flex flex-col">
 							<div class="flex flex-row gap-6">
-								<SveltyPicker
-									pickerOnly={true}
-									bind:value={startDate}
-									format="dd MM yyyy"
-									clearToggle={false}
-									theme={calendarColors}
-									todayBtn={false}
-									clearBtn={false}
-									{endDate}
-									on:change={selectCustom}
-								/>
-								<SveltyPicker
-									pickerOnly={true}
-									bind:value={endDate}
-									format="dd MM yyyy"
-									clearToggle={false}
-									theme={calendarColors}
-									todayBtn={false}
-									clearBtn={false}
-									{startDate}
-									endDate={todayFormatted}
-									on:change={selectCustom}
-								/>
+								{#if showLeft}
+									<SveltyPicker
+										pickerOnly={true}
+										bind:value={startDate}
+										format="dd MM yyyy"
+										clearToggle={false}
+										theme={calendarColors}
+										todayBtn={false}
+										clearBtn={false}
+										{endDate}
+										on:change={selectCustom}
+									/>
+								{/if}
+								{#if showRight}
+									<SveltyPicker
+										pickerOnly={true}
+										bind:value={endDate}
+										format="dd MM yyyy"
+										clearToggle={false}
+										theme={calendarColors}
+										todayBtn={false}
+										clearBtn={false}
+										{startDate}
+										endDate={yesterdayFormatted}
+										on:change={selectCustom}
+									/>
+								{/if}
 							</div>
+							<span class="text-xs text-center text-lighter-emphasis italic"
+								>Jika salah satu kalender tidak responsif, silahkan klik kembali tanggal yang sudah
+								Anda pilih.</span
+							>
 							<span class="text-center">Rentang waktu yang dipilih:</span>
 							<span class="text-center">{startDate} - {endDate}</span>
 						</div>
