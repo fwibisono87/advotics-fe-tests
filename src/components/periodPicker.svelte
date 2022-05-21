@@ -1,13 +1,14 @@
 <script lang="ts">
 	import SveltyPicker from 'svelty-picker';
+	import ClickOutside from 'svelte-click-outside';
 
 	export let startDate = '12 September 2018';
 	export let endDate = '14 September 2018';
 
-    const calendarColors = 'calendar-colors';
+	const calendarColors = 'calendar-colors';
 	const today = Date.now();
-    const yesterday = new Date(today - 86400000);
-    const formatter = new Intl.DateTimeFormat('en-GB', {
+	const yesterday = new Date(today - 86400000);
+	const formatter = new Intl.DateTimeFormat('en-GB', {
 		year: 'numeric',
 		month: 'long',
 		day: 'numeric'
@@ -21,10 +22,14 @@
 		custom: false
 	};
 	let expanded = false;
-    
-    function toggleExpand() {
+    let trigger;
+
+	function toggleExpand() {
 		expanded = !expanded;
 	}
+    function close(){
+        expanded = false
+    }
 	function setActiveSelector(selector: string) {
 		let key: keyof typeof activeSelector;
 		for (key in activeSelector) {
@@ -74,6 +79,7 @@
 <template>
 	<div class="relative inline-block">
 		<div
+        bind:this={trigger}
 			class="flex flex-row bg-white rounded-sm shadow-md py-3.5 px-4 h-min my-auto cursor-pointer"
 			on:click={toggleExpand}
 		>
@@ -88,81 +94,83 @@
 			/>
 		</div>
 		{#if expanded}
-			<div
-				class="bg-white z-10 absolute right-0 top-0 w-fit-content p-6 shadow-md rounded-sm flex flex-col"
-			>
-				<div class="flex flex-row w-full justify-between mb-4">
-					<div class="flex flex-row">
-						<img src="img/calendar.png" class="w-5 h-5 mr-4 my-auto" alt="" />
-						<span class="my-auto"> Period </span>
-					</div>
-
-					<img
-						src="img/close.png"
-						class="w-6 rotate-180 cursor-pointer"
-						alt="Expand Date Picker"
-						on:click={toggleExpand}
-					/>
-				</div>
-				<div class="flex flex-row">
-					<div class="flex flex-col">
-						<span
-							class="rangeSelector"
-							class:rangeSelectorActive={activeSelector.yesterday}
-							on:click={selectYesterday}>Yesterday</span
-						>
-						<span
-							class="rangeSelector"
-							class:rangeSelectorActive={activeSelector.sevenDays}
-							on:click={select7Days}>Last 7 Days</span
-						>
-						<span
-							class="rangeSelector"
-							class:rangeSelectorActive={activeSelector.lastThirtyDays}
-							on:click={select30Days}>Last 30 days</span
-						>
-						<span
-							class="rangeSelector"
-							class:rangeSelectorActive={activeSelector.lastMonth}
-							on:click={selectLastMonth}>Last Month</span
-						>
-						<span
-							class="rangeSelector"
-							class:rangeSelectorActive={activeSelector.custom}
-							on:click={selectCustom}>Custom</span
-						>
-					</div>
-					<div class="flex flex-col">
-						<div class="flex flex-row gap-6">
-							<SveltyPicker
-								pickerOnly={true}
-								bind:value={startDate}
-								format="dd MM yyyy"
-								clearToggle={false}
-								theme={calendarColors}
-								todayBtn={false}
-								clearBtn={false}
-								{endDate}
-								on:change={selectCustom}
-							/>
-							<SveltyPicker
-								pickerOnly={true}
-								bind:value={endDate}
-								format="dd MM yyyy"
-								clearToggle={false}
-								theme={calendarColors}
-								todayBtn={false}
-								clearBtn={false}
-								{startDate}
-								endDate={todayFormatted}
-								on:change={selectCustom}
-							/>
+			<ClickOutside on:clickoutside={close} exclude={[trigger]}>
+				<div
+					class="bg-white z-10 absolute right-0 top-0 w-fit-content p-6 shadow-md rounded-sm flex flex-col"
+				>
+					<div class="flex flex-row w-full justify-between mb-4">
+						<div class="flex flex-row">
+							<img src="img/calendar.png" class="w-5 h-5 mr-4 my-auto" alt="" />
+							<span class="my-auto"> Period </span>
 						</div>
-						<span class="text-center">Rentang waktu yang dipilih:</span>
-						<span class="text-center">{startDate} - {endDate}</span>
+
+						<img
+							src="img/close.png"
+							class="w-6 rotate-180 cursor-pointer"
+							alt="Expand Date Picker"
+							on:click={toggleExpand}
+						/>
+					</div>
+					<div class="flex flex-row">
+						<div class="flex flex-col">
+							<span
+								class="rangeSelector"
+								class:rangeSelectorActive={activeSelector.yesterday}
+								on:click={selectYesterday}>Yesterday</span
+							>
+							<span
+								class="rangeSelector"
+								class:rangeSelectorActive={activeSelector.sevenDays}
+								on:click={select7Days}>Last 7 Days</span
+							>
+							<span
+								class="rangeSelector"
+								class:rangeSelectorActive={activeSelector.lastThirtyDays}
+								on:click={select30Days}>Last 30 days</span
+							>
+							<span
+								class="rangeSelector"
+								class:rangeSelectorActive={activeSelector.lastMonth}
+								on:click={selectLastMonth}>Last Month</span
+							>
+							<span
+								class="rangeSelector"
+								class:rangeSelectorActive={activeSelector.custom}
+								on:click={selectCustom}>Custom</span
+							>
+						</div>
+						<div class="flex flex-col">
+							<div class="flex flex-row gap-6">
+								<SveltyPicker
+									pickerOnly={true}
+									bind:value={startDate}
+									format="dd MM yyyy"
+									clearToggle={false}
+									theme={calendarColors}
+									todayBtn={false}
+									clearBtn={false}
+									{endDate}
+									on:change={selectCustom}
+								/>
+								<SveltyPicker
+									pickerOnly={true}
+									bind:value={endDate}
+									format="dd MM yyyy"
+									clearToggle={false}
+									theme={calendarColors}
+									todayBtn={false}
+									clearBtn={false}
+									{startDate}
+									endDate={todayFormatted}
+									on:change={selectCustom}
+								/>
+							</div>
+							<span class="text-center">Rentang waktu yang dipilih:</span>
+							<span class="text-center">{startDate} - {endDate}</span>
+						</div>
 					</div>
 				</div>
-			</div>
+			</ClickOutside>
 		{/if}
 	</div>
 </template>
