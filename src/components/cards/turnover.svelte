@@ -14,7 +14,7 @@
 	<div
 		class="flex flex-col bg-white rounded-sm shadow-sm py-4 pl-4 pr-5 font-source-sans w-72 justify-between my-4"
 	>
-		<h3 class="text-light-emphasis">Sales Turnover</h3>
+		<h3 class="text-[#43425D] opacity-50">Sales Turnover</h3>
 		<div class="flex flex-row justify-between">
 			<div class="flex flex-col">
 				<span class="text-emphasis font-bold text-2xl">{formattedValue}</span>

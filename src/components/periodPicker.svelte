@@ -10,7 +10,6 @@
 
 	let showLeft = true;
 	let showRight = true;
-	let counter = 0;
 
 	const calendarColors = 'calendar-colors';
 	const today = Date.now();
@@ -198,8 +197,6 @@
 								>Jika salah satu kalender tidak responsif, silahkan klik kembali tanggal yang sudah
 								Anda pilih.</span
 							>
-							<span class="text-center">Rentang waktu yang dipilih:</span>
-							<span class="text-center">{startDate} - {endDate}</span>
 						</div>
 					</div>
 				</div>

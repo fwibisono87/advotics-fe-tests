@@ -44,7 +44,7 @@
 <template>
 	<div class="flex flex-col bg-white rounded-md shadow-md p-4">
 		<div class="flex flex-row justify-between">
-			<h3 class="mb-4 text-xl text-emphasis">
+			<h3 class="mb-4 text-xl text-emphasis uppercase">
 				{title}
 			</h3>
 			<img src="img/kebab.png" alt="" class="h-5" />

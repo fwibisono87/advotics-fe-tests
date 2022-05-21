@@ -3,6 +3,7 @@
 	import Turnover from './cards/turnover.svelte';
 
 	import { ourProducts } from '$lib/dummyData';
+	import Chart from './cards/chart.svelte';
 
 	let visibility = true;
 	export let mode = 'yesterday';
@@ -36,7 +37,11 @@
 		</h2>
 		<div class="flex flex-row">
 			<img src="img/help.png" alt="Help" class="w-5 h-5 my-auto" />
-			<span class="underline my-auto text-white text-sm mt-auto">Click Here for Help</span>
+			<a
+				class="underline my-auto text-white text-sm mt-auto"
+				href="https://www.advotics.com/en/contact-us/"
+				target="_blank">Click Here for Help</a
+			>
 			<img
 				src="img/chevron-up.png"
 				alt="Switch Arrow"
@@ -47,9 +52,12 @@
 		</div>
 	</div>
 	{#if visibility}
-		<div class="flex flex-col gap-1">
+		<div class="flex flex-col gap-1 w-max">
 			<Turnover />
-			<div class="flex flex-row gap-4">
+			<div class="flex flex-row gap-4 w-max">
+				<div class="w-max">
+					<Chart />
+				</div>
 				<SkuList title="Best Selling SKU" skuList={ourArray} />
 				<SkuList title="Top Competitor SKU" />
 			</div>
