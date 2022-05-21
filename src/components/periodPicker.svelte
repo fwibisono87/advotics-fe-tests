@@ -1,5 +1,7 @@
 <script lang="ts">
+    // @ts-ignore, these modules were not made to be compatible with TS
 	import SveltyPicker from 'svelty-picker';
+    // @ts-ignore
 	import ClickOutside from 'svelte-click-outside';
 
 	export let startDate = '12 September 2018';
